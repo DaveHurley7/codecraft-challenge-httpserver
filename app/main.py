@@ -3,7 +3,7 @@ import socket
 import threading
 
 def handle_client(c_sk):
-    print("Handling client")
+    print("Handling client",c_sk)
     req = c_sk.recv(1024).decode()
     print("Have request")
     startln, *headers = req.split("\r\n")
