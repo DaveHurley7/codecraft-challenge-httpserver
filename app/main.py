@@ -4,7 +4,7 @@ import threading
 
 def handle_client(c_sk):
     print("Handling client",c_sk)
-    c_sk.setblocking(0)
+    #c_sk.setblocking(0)
     req = c_sk.recv(512)
     req = req.decode()
     print("Have request")
@@ -39,6 +39,7 @@ def main():
     #
     server_socket = socket.create_server(("localhost", 4221), reuse_port=True)
     c_sk, addr = server_socket.accept() # wait for client
+    c_sk.setblocking(0)
     t = threading.Thread(target=handle_client,args=[c_sk])
     t.start()
 
