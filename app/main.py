@@ -32,9 +32,9 @@ def handle_client(c_sk,addr):
             if argv[1] != "--directory":
                 msg = "HTTP/1.1 404 Not Found\r\n\r\n"
             else:
-                filename = argv[2]
+                host_dir = argv[2][:-1]
                 try:
-                    fd = open(filename)
+                    fd = open(host_dir+path)
                     content = fd.read()
                     fd.close()
                     dlen = len(content)
