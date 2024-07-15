@@ -33,8 +33,10 @@ def handle_client(c_sk,addr):
                 msg = "HTTP/1.1 404 Not Found\r\n\r\n"
             else:
                 host_dir = argv[2][:-1]
+                req_file = path[7:]
                 try:
-                    fd = open(host_dir+path)
+                    print("Attempting to open")
+                    fd = open(host_dir+req_file)
                     content = fd.read()
                     fd.close()
                     dlen = len(content)
