@@ -6,6 +6,10 @@ from multiprocessing import Process
 def handle_client(c_sk):
     print("Handling client",c_sk)
     #c_sk.setblocking(0)
+    msg = "HTTP/1.1 200 OK\r\n\r\n"
+    c_sk.send(msg.encode())
+    c_sk.close()
+    return
     req = c_sk.recv(512)
     req = req.decode()
     print("Have request")
