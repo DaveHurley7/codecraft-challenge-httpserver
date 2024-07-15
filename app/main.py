@@ -27,6 +27,7 @@ def handle_client(c_sk,addr):
         msg = "HTTP/1.1 200 OK\r\n\r\n"
     elif path.startswith("/echo/"):
         print("ECHOING")
+        print(headers)
         if "Accept-Encoding" in headers:
             print("USING ENCODING")
             encoding_type = find_mutual_encoding(headers["Accept-Encoding"])
