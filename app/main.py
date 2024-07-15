@@ -16,7 +16,7 @@ def main():
     #if path == "/":
     text = path[6:]
     tlen = len(text)
-    c_sk.send("HTTP/1.1 200 OK\r\nContent-Type: application/text-plain\r\nContent-Length: "+str(tlen)+"\r\n\r\n"+text.encode())
+    c_sk.send(("HTTP/1.1 200 OK\r\nContent-Type: application/text-plain\r\nContent-Length: "+str(tlen)+"\r\n\r\n"+text).encode())
     #else:
      #   c_sk.send("HTTP/1.1 404 Not Found\r\n\r\n".encode())
     
