@@ -16,6 +16,7 @@ def find_mutual_encoding(client_encoding_list):
 
 def handle_client(c_sk,addr):
     req = c_sk.recv(512).decode()
+    is_encoded = False
     req_start, req_data = req.split("\r\n\r\n")
     startln, *headers = req_start.split("\r\n")
     req_hdrs = {}
@@ -33,7 +34,8 @@ def handle_client(c_sk,addr):
             if encoding_type:
                 compressed = zlib.compress(path[6:].encode())
                 clen = len(compressed)
-                msg = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: " + encoding_type + "Content-Length: " + str(clen) + "\r\n\r\n" + compressed
+                is_encoded = True
+                msg = b"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: " + encoding_type.encode() + b"Content-Length: " + str(clen).encode() + b"\r\n\r\n" + compressed
             else:
                 msg = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n"
         else:
@@ -76,7 +78,9 @@ def handle_client(c_sk,addr):
                 
     else:
         msg = "HTTP/1.1 404 Not Found\r\n\r\n"
-    c_sk.send(msg.encode())
+    if is_encoded:
+        c_sk.send(msg)
+    else: c_sk.send(msg.encode())
     c_sk.close()
 
 def main():
