@@ -2,13 +2,13 @@
 import socket
 import threading
 import sys
+import zlib
 
 accepted_encodings = ["gzip"]
 
 def find_mutual_encoding(client_encoding_list):
     enc_list = client_encoding_list.strip().split(",")
     enc_list = [enc.strip() for enc in enc_list]
-    print("ENCODINGS POSSIBLE",enc_list)
     for enc in enc_list:
         if enc in accepted_encodings:
             return enc
@@ -28,12 +28,12 @@ def handle_client(c_sk,addr):
     if path == "/":
         msg = "HTTP/1.1 200 OK\r\n\r\n"
     elif path.startswith("/echo/"):
-        print(req_hdrs)
         if "Accept-Encoding" in req_hdrs:
             encoding_type = find_mutual_encoding(req_hdrs["Accept-Encoding"])
-            print(encoding_type)
             if encoding_type:
-                msg = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: " + encoding_type + "\r\n\r\n"
+                compressed = zlib.compress(path[6:])
+                clen = len(compressed)
+                msg = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: " + encoding_type + "Content-Length: " + str(clen) + "\r\n\r\n" + compressed
             else:
                 msg = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n"
         else:
