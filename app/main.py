@@ -30,7 +30,7 @@ def handle_client(c_sk,addr):
         print(req_hdrs)
         if "Accept-Encoding" in req_hdrs:
             print("USING ENCODING")
-            encoding_type = find_mutual_encoding(headers["Accept-Encoding"])
+            encoding_type = find_mutual_encoding(req_hdrs["Accept-Encoding"])
             if encoding_type:
                 msg = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: " + encoding_type + "\r\n"
             else:
