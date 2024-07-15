@@ -42,7 +42,7 @@ def main():
     c_sk, addr = server_socket.accept() # wait for client
     #c_sk.setblocking(0)
     #t = threading.Thread(target=handle_client,args=[c_sk])
-    p = Process(target=handle_client,args=(c_sk))
+    p = Process(target=handle_client,args=[c_sk])
     p.start()
 
 if __name__ == "__main__":
