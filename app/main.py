@@ -2,7 +2,7 @@
 import socket
 import threading
 import sys
-import zlib
+import gzip
 
 accepted_encodings = ["gzip"]
 
@@ -32,7 +32,7 @@ def handle_client(c_sk,addr):
         if "Accept-Encoding" in req_hdrs:
             encoding_type = find_mutual_encoding(req_hdrs["Accept-Encoding"])
             if encoding_type:
-                compressed = zlib.compress(path[6:].encode())
+                compressed = gzip.compress(path[6:].encode())
                 clen = len(compressed)
                 is_encoded = True
                 msg = b"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: " + encoding_type.encode() + b"\r\nContent-Length: " + str(clen).encode() + b"\r\n\r\n" + compressed
