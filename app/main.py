@@ -14,10 +14,10 @@ def main():
     startln, *headers = req.split("\r\n")
     req_hdrs = {}
     for hdr in headers:
-        print(hdr)
         if hdr == "\r\n":
             continue
         hdr_ln = hdr.split(":")
+        print(hdr_ln)
         req_hdrs[hdr_ln[0].strip()] = hdr_ln[1].strip() 
     method, path, httpv = startln.split()
     if path == "/":
