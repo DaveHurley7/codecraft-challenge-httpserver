@@ -3,8 +3,8 @@ import socket
 import threading
 from multiprocessing import Process
 
-def handle_client(c_sk):
-    print("Handling client",c_sk)
+def handle_client(c_sk,addr):
+    print("Handling client from",addr)
     req = c_sk.recv(512).decode()
     print("Have request")
     startln, *headers = req.split("\r\n")
@@ -39,14 +39,7 @@ def main():
     server_socket = socket.create_server(("localhost", 4221), reuse_port=True)
     c_sk, addr = server_socket.accept() # wait for client
     #handle_client(c_sk)
-    print("Client connected",addr)
-    c_sk.recv(1024)
-    msg = "HTTP/1.1 200 OK\r\n\r\n"
-    c_sk.send(msg.encode())
-    #c_sk.setblocking(0)
-    #t = threading.Thread(target=handle_client,args=[c_sk])
-    #p = Process(target=handle_client,args=[c_sk])
-    #p.start()
+    threading.Thread(target=handle_client,args=[c_sk,addr]).start()
 
 if __name__ == "__main__":
     main()
