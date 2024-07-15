@@ -24,7 +24,8 @@ def handle_client(c_sk,addr):
         tlen = len(text)
         msg = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: "+str(tlen)+"\r\n\r\n"+text
     elif path.startswith("/files/"):
-        argc = len(sys.argv)
+        argv = sys.argv
+        argc = len(argv)
         if argc != 3:
             msg = "HTTP/1.1 404 Not Found\r\n\r\n"
         else:
