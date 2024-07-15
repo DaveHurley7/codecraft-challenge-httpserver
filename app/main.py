@@ -39,6 +39,7 @@ def main():
     server_socket = socket.create_server(("localhost", 4221), reuse_port=True)
     c_sk, addr = server_socket.accept() # wait for client
     #handle_client(c_sk)
+    print("Client connected",addr)
     c_sk.recv(1024)
     msg = "HTTP/1.1 200 OK\r\n\r\n"
     c_sk.send(msg.encode())
