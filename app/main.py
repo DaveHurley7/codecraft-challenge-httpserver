@@ -14,6 +14,7 @@ def main():
     startln, *headers = req.split("\r\n")
     req_hdrs = {}
     for hdr in headers:
+        print(hdr)
         if hdr == "\r\n":
             continue
         hdr_ln = hdr.split(":")
