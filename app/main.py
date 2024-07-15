@@ -14,7 +14,7 @@ def main():
     startln, *headers = req.split("\r\n")
     method, path, httpv = startln.split()
     if path == "/":
-        c_sk.send("HTTP/1.1 200 OK\r\n\r\n".encode())
+        c_sk.send("HTTP/1.1 200 OK\r\nContent-Type: application/text-plain\r\nContent-Length: 3\r\n\r\nabc".encode())
     else:
         c_sk.send("HTTP/1.1 404 Not Found\r\n\r\n".encode())
     
