@@ -56,6 +56,7 @@ def main():
     # Uncomment this to pass the first stage
     #
     sk = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    sk.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEPORT,1)
     sk.bind(("localhost", 4221))
     sk.listen(10)
     while True:
