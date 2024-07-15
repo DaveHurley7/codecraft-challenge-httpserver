@@ -10,7 +10,7 @@ def main():
     #
     server_socket = socket.create_server(("localhost", 4221), reuse_port=True)
     c_sk, addr = server_socket.accept() # wait for client
-    req = c_sk.recv().decode()
+    req = c_sk.recv(1024).decode()
     startln, *headers = req.split("\r\n")
     method, path, httpv = startln.split()
     if path == "/":
