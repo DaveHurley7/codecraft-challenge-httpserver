@@ -4,9 +4,8 @@ import threading
 
 def handle_client(c_sk):
     print("Handling client",c_sk)
-    msg = "HTTP/1.1 200 OK\r\n\r\n"
-    c_sk.send(msg.encode())
-    req = c_sk.recv(1024)
+    c_sk.setblocking(0)
+    req = c_sk.recv(512)
     req = req.decode()
     print("Have request")
     startln, *headers = req.split("\r\n")
