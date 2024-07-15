@@ -5,7 +5,8 @@ import sys
 
 def handle_client(c_sk,addr):
     req = c_sk.recv(512).decode()
-    startln, *headers = req.split("\r\n")
+    req_start, req_data = req.split("\r\n\r\n")
+    startln, *headers = req_start.split("\r\n")
     req_hdrs = {}
     for hdr in headers:
         if hdr == "":
@@ -34,15 +35,24 @@ def handle_client(c_sk,addr):
             else:
                 host_dir = argv[2]
                 req_file = path[7:]
-                try:
-                    print("Attempting to open")
-                    fd = open(host_dir+req_file)
-                    content = fd.read()
-                    fd.close()
-                    dlen = len(content)
-                    msg = "HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: "+str(dlen)+"\r\n\r\n"+content
-                except FileNotFoundError:
-                    msg = "HTTP/1.1 404 Not Found\r\n\r\n"
+                if method == "GET":
+                    try:
+                        print("Attempting to open")
+                        fd = open(host_dir+req_file)
+                        content = fd.read()
+                        fd.close()
+                        dlen = len(content)
+                        msg = "HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: "+str(dlen)+"\r\n\r\n"+content
+                    except FileNotFoundError:
+                        msg = "HTTP/1.1 404 Not Found\r\n\r\n"
+                elif method == "POST":
+                    file = open(host_dir+req_file,"w")
+                    file.write(req_data)
+                    dlen = len(req_data)
+                    msg = "HTTP/1.1 201 Created\r\n\r\n"
+                    file.close()
+                else:
+                    msg = "HTTP/1.1 501 Not Implemented\r\n\r\n"
                 
     else:
         msg = "HTTP/1.1 404 Not Found\r\n\r\n"
