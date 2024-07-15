@@ -17,7 +17,7 @@ def main():
         if hdr == "\r\n":
             continue
         hdr_ln = hdr.split(":")
-        hdr[hdr_ln[0].strip()] = hdr_ln[1].strip() 
+        req_hdrs[hdr_ln[0].strip()] = hdr_ln[1].strip() 
     method, path, httpv = startln.split()
     if path == "/":
         msg = "HTTP/1.1 200 OK\r\n\r\n"
