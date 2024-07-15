@@ -4,7 +4,8 @@ import threading
 
 def handle_client(c_sk):
     print("Handling client")
-    #req = c_sk.recv(1024).decode()
+    req = c_sk.recv(1024).decode()
+    print("Have request")
     startln, *headers = req.split("\r\n")
     req_hdrs = {}
     for hdr in headers:
