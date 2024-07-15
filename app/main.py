@@ -3,6 +3,15 @@ import socket
 import threading
 import sys
 
+accepted_encodings = ["gzip"]
+
+def find_mutual_encoding(client_encoding_list):
+    enc_list = client_encoding_list.strip().split(",")
+    for enc in enc_list:
+        if enc in accepted_encodings:
+            return enc
+    return None
+
 def handle_client(c_sk,addr):
     req = c_sk.recv(512).decode()
     req_start, req_data = req.split("\r\n\r\n")
@@ -17,9 +26,16 @@ def handle_client(c_sk,addr):
     if path == "/":
         msg = "HTTP/1.1 200 OK\r\n\r\n"
     elif path.startswith("/echo/"):
+        print("ECHOING")
         if "Accept-Encoding" in headers:
-            msg = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: " + headers["Accept-Encoding"].strip() 
+            print("USING ENCODING")
+            encoding_type = find_mutual_encoding(headers["Accept-Encoding"])
+            if encoding_type:
+                msg = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: " + encoding_type + "\r\n"
+            else:
+                msg = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n"
         else:
+            print("ENCODING NOT USED")
             text = path[6:]
             tlen = len(text)
             msg = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: "+str(tlen)+"\r\n\r\n"+text
