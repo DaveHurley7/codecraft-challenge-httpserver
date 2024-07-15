@@ -36,6 +36,7 @@ def handle_client(c_sk,addr):
                 clen = len(compressed)
                 is_encoded = True
                 msg = b"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: " + encoding_type.encode() + b"\r\nContent-Length: " + str(clen).encode() + b"\r\n\r\n" + compressed
+                print(msg)
             else:
                 msg = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n"
         else:
