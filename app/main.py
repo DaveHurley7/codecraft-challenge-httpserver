@@ -17,9 +17,12 @@ def handle_client(c_sk,addr):
     if path == "/":
         msg = "HTTP/1.1 200 OK\r\n\r\n"
     elif path.startswith("/echo/"):
-        text = path[6:]
-        tlen = len(text)
-        msg = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: "+str(tlen)+"\r\n\r\n"+text
+        if "Accept-Encoding" in headers:
+            msg = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: " + headers["Accept-Encoding"].strip() 
+        else:
+            text = path[6:]
+            tlen = len(text)
+            msg = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: "+str(tlen)+"\r\n\r\n"+text
     elif path.startswith("/user-agent"):
         text = req_hdrs["User-Agent"]
         tlen = len(text)
