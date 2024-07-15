@@ -37,9 +37,11 @@ def main():
     # Uncomment this to pass the first stage
     #
     server_socket = socket.create_server(("localhost", 4221), reuse_port=True)
-    c_sk, addr = server_socket.accept() # wait for client
-    #handle_client(c_sk)
-    threading.Thread(target=handle_client,args=[c_sk,addr]).start()
+    server_socket.listen(10)
+    while True:
+        c_sk, addr = server_socket.accept() # wait for client
+        #handle_client(c_sk)
+        threading.Thread(target=handle_client,args=[c_sk,addr]).start()
 
 if __name__ == "__main__":
     main()
