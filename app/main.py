@@ -7,6 +7,7 @@ accepted_encodings = ["gzip"]
 
 def find_mutual_encoding(client_encoding_list):
     enc_list = client_encoding_list.strip().split(",")
+    print("ENCODINGS POSSIBLE",enc_List)
     for enc in enc_list:
         if enc in accepted_encodings:
             return enc
@@ -26,10 +27,8 @@ def handle_client(c_sk,addr):
     if path == "/":
         msg = "HTTP/1.1 200 OK\r\n\r\n"
     elif path.startswith("/echo/"):
-        print("ECHOING")
         print(req_hdrs)
         if "Accept-Encoding" in req_hdrs:
-            print("USING ENCODING")
             encoding_type = find_mutual_encoding(req_hdrs["Accept-Encoding"])
             print(encoding_type)
             if encoding_type:
@@ -37,7 +36,6 @@ def handle_client(c_sk,addr):
             else:
                 msg = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n"
         else:
-            print("ENCODING NOT USED")
             text = path[6:]
             tlen = len(text)
             msg = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: "+str(tlen)+"\r\n\r\n"+text
