@@ -1,12 +1,10 @@
 # Uncomment this to pass the first stage
 import socket
 import threading
-from multiprocessing import Process
+import sys
 
 def handle_client(c_sk,addr):
-    print("Handling client from",addr)
     req = c_sk.recv(512).decode()
-    print("Have request")
     startln, *headers = req.split("\r\n")
     req_hdrs = {}
     for hdr in headers:
@@ -25,6 +23,24 @@ def handle_client(c_sk,addr):
         text = req_hdrs["User-Agent"]
         tlen = len(text)
         msg = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: "+str(tlen)+"\r\n\r\n"+text
+    elif path.startswith("/files/"):
+        argc = len(sys.argv)
+        if argc != 3:
+            msg = "HTTP/1.1 404 Not Found\r\n\r\n"
+        else:
+            if argv[1] != "--directory":
+                msg = "HTTP/1.1 404 Not Found\r\n\r\n"
+            else:
+                filename = argv[2]
+                try:
+                    fd = open(filename)
+                    content = fd.read()
+                    fd.close()
+                    dlen = len(content)
+                    msg = "HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: "+str(dlen)+"\r\n\r\n"+content
+                except FileNotFoundError:
+                    msg = "HTTP/1.1 404 Not Found\r\n\r\n"
+                
     else:
         msg = "HTTP/1.1 404 Not Found\r\n\r\n"
     c_sk.send(msg.encode())
@@ -36,11 +52,11 @@ def main():
 
     # Uncomment this to pass the first stage
     #
-    server_socket = socket.create_server(("localhost", 4221), reuse_port=True)
-    server_socket.listen(10)
+    sk = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    sk.bind(("localhost", 4221))
+    sk.listen(10)
     while True:
-        c_sk, addr = server_socket.accept() # wait for client
-        #handle_client(c_sk)
+        c_sk, addr = sk.accept() # wait for client
         threading.Thread(target=handle_client,args=[c_sk,addr]).start()
 
 if __name__ == "__main__":
