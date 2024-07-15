@@ -32,7 +32,7 @@ def handle_client(c_sk,addr):
             print("USING ENCODING")
             encoding_type = find_mutual_encoding(req_hdrs["Accept-Encoding"])
             if encoding_type:
-                msg = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: " + encoding_type + "\r\n"
+                msg = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: " + encoding_type + "\r\n\r\n"
             else:
                 msg = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n"
         else:
