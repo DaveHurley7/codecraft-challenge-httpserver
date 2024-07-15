@@ -7,7 +7,7 @@ accepted_encodings = ["gzip"]
 
 def find_mutual_encoding(client_encoding_list):
     enc_list = client_encoding_list.strip().split(",")
-    enc_list = [enc.stip() for enc in enc_list]
+    enc_list = [enc.strip() for enc in enc_list]
     print("ENCODINGS POSSIBLE",enc_list)
     for enc in enc_list:
         if enc in accepted_encodings:
