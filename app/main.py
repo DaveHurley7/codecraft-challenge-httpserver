@@ -25,7 +25,7 @@ def main():
         text = path[6:]
         tlen = len(text)
         msg = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: "+str(tlen)+"\r\n\r\n"+text
-    elif path.startswith("/useragent"):
+    elif path.startswith("/user-agent"):
         text = req_hdrs["User-Agent"]
         tlen = len(text)
         msg = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: "+str(tlen)+"\r\n\r\n"+text
