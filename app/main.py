@@ -1,15 +1,8 @@
 # Uncomment this to pass the first stage
 import socket
+import threading
 
-
-def main():
-    # You can use print statements as follows for debugging, they'll be visible when running tests.
-    print("Logs from your program will appear here!")
-
-    # Uncomment this to pass the first stage
-    #
-    server_socket = socket.create_server(("localhost", 4221), reuse_port=True)
-    c_sk, addr = server_socket.accept() # wait for client
+def handle_client(c_sk):
     req = c_sk.recv(1024).decode()
     startln, *headers = req.split("\r\n")
     req_hdrs = {}
@@ -32,8 +25,18 @@ def main():
     else:
         msg = "HTTP/1.1 404 Not Found\r\n\r\n"
     c_sk.send(msg.encode())
-    
+    c_sk.close()
 
+def main():
+    # You can use print statements as follows for debugging, they'll be visible when running tests.
+    print("Logs from your program will appear here!")
+
+    # Uncomment this to pass the first stage
+    #
+    server_socket = socket.create_server(("localhost", 4221), reuse_port=True)
+    c_sk, addr = server_socket.accept() # wait for client
+    t = threading.Thread(target=handle_client,args=[c_sk])
+    t.start()
 
 if __name__ == "__main__":
     main()
