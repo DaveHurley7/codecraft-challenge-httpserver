@@ -35,7 +35,7 @@ def handle_client(c_sk,addr):
                 compressed = zlib.compress(path[6:].encode())
                 clen = len(compressed)
                 is_encoded = True
-                msg = b"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: " + encoding_type.encode() + b"Content-Length: " + str(clen).encode() + b"\r\n\r\n" + compressed
+                msg = b"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: " + encoding_type.encode() + b"\r\nContent-Length: " + str(clen).encode() + b"\r\n\r\n" + compressed
             else:
                 msg = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n"
         else:
