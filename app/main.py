@@ -44,10 +44,11 @@ def main():
     #
     server_socket = socket.create_server(("localhost", 4221), reuse_port=True)
     c_sk, addr = server_socket.accept() # wait for client
+    handle_client(c_sk)
     #c_sk.setblocking(0)
     #t = threading.Thread(target=handle_client,args=[c_sk])
-    p = Process(target=handle_client,args=[c_sk])
-    p.start()
+    #p = Process(target=handle_client,args=[c_sk])
+    #p.start()
 
 if __name__ == "__main__":
     main()
